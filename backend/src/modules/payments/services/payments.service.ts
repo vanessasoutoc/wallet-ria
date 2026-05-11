@@ -81,7 +81,7 @@ export class PaymentsService {
     };
   }
 
-  async getAllPayments(page = 1) {
-    return this.paymentsRepository.listPayments(page, 10);
+  async getAllPayments(page = 1, limit = 10) {
+    return this.paymentsRepository.listPayments(page, limit);
   }
 }

@@ -220,7 +220,7 @@ describe('PaymentsService', () => {
       expect(uniqueStepNames.size).toBe(stepNames.length);
     });
 
-    it('should fetch payments with 10 items per page', async () => {
+    it('should fetch payments with default limit of 10 when no limit provided', async () => {
       const result = await service.getAllPayments(3);
 
       expect(paymentsRepository.listPayments).toHaveBeenCalledWith(3, 10);
@@ -231,6 +231,26 @@ describe('PaymentsService', () => {
         totalItems: 0,
         totalPages: 1,
       });
+    });
+
+    it('should fetch payments with custom limit when provided', async () => {
+      const result = await service.getAllPayments(2, 25);
+
+      expect(paymentsRepository.listPayments).toHaveBeenCalledWith(2, 25);
+      expect(result).toEqual({
+        items: [],
+        page: 1,
+        limit: 10,
+        totalItems: 0,
+        totalPages: 1,
+      });
+    });
+
+    it('should pass page and limit to repository', async () => {
+      await service.getAllPayments(5, 50);
+
+      expect(paymentsRepository.listPayments).toHaveBeenCalledWith(5, 50);
+      expect(paymentsRepository.listPayments).toHaveBeenCalledTimes(1);
     });
   });
 });
