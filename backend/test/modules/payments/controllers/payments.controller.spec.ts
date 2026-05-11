@@ -40,6 +40,7 @@ describe('PaymentsController', () => {
           provide: PaymentsService,
           useValue: {
             processPayment: jest.fn(),
+            getAllPayments: jest.fn(),
           },
         },
       ],
@@ -167,6 +168,41 @@ describe('PaymentsController', () => {
           'Payment processing failed',
         );
       }
+    });
+  });
+
+  describe('findAll (GET /v1/payments)', () => {
+    it('should call getAllPayments with the provided page', async () => {
+      const paginatedResponse = {
+        items: [mockApprovedResponse],
+        page: 2,
+        limit: 10,
+        totalItems: 1,
+        totalPages: 1,
+      };
+
+      jest.spyOn(service, 'getAllPayments').mockResolvedValue(paginatedResponse);
+
+      await controller.findAll(2);
+
+      expect(service.getAllPayments).toHaveBeenCalledWith(2);
+      expect(service.getAllPayments).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return the paginated result from getAllPayments', async () => {
+      const paginatedResponse = {
+        items: [mockApprovedResponse],
+        page: 1,
+        limit: 10,
+        totalItems: 1,
+        totalPages: 1,
+      };
+
+      jest.spyOn(service, 'getAllPayments').mockResolvedValue(paginatedResponse);
+
+      const result = await controller.findAll(1);
+
+      expect(result).toEqual(paginatedResponse);
     });
   });
 });

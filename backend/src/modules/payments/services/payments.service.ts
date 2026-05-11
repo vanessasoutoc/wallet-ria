@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import delay from '../../../common/utils/delay';
 import randomBetween from '../../../common/utils/random-between';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { PaymentsRepository } from '../repositories/payments.repository';
 
 type StepName =
   | 'account_validation'
@@ -31,6 +33,8 @@ const STEP_ORDER: StepName[] = [
 
 @Injectable()
 export class PaymentsService {
+  constructor(private readonly paymentsRepository: PaymentsRepository) {}
+
   private selectSteps(): StepName[] {
     const count = randomBetween(3, 6);
     const shuffled = [...STEP_ORDER].sort(() => Math.random() - 0.5);
@@ -58,29 +62,26 @@ export class PaymentsService {
 
     const totalTimeMs = results.reduce((sum, r) => sum + r.timeMs, 0);
     const declined = Math.random() < 0.1;
+    const status = declined ? 'declined' : 'approved';
+    const transactionId = randomUUID();
+
+    this.paymentsRepository.saveTransaction({
+      payment: dto,
+      transactionId,
+      status,
+      totalTimeMs,
+      steps: results,
+    });
 
     return {
-      status: declined ? 'declined' : 'approved',
-      transactionId: `txn_${Date.now()}`,
+      status,
+      transactionId,
       totalTimeMs,
       steps: results,
     };
   }
 
-  async getAllPayments() {
-    return [
-      {
-        id: '1',
-        amount: 100,
-        status: 'approved',
-        createdAt: new Date(),
-      },
-      {
-        id: '2',
-        amount: 200,
-        status: 'declined',
-        createdAt: new Date(),
-      },
-    ];
+  async getAllPayments(page = 1) {
+    return this.paymentsRepository.listPayments(page, 10);
   }
 }

@@ -5,6 +5,9 @@ import {
   Version,
   InternalServerErrorException,
   Get,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PaymentsService } from '../services/payments.service';
 import { CreatePaymentDto } from '../dto/create-payment.dto';
@@ -21,5 +24,13 @@ export class PaymentsController {
     } catch {
       throw new InternalServerErrorException('Payment processing failed');
     }
+  }
+
+  @Get()
+  @Version('1')
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  ) {
+    return this.paymentsService.getAllPayments(page);
   }
 }
