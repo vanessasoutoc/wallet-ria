@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PaymentsService } from './payments.service';
-import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { PaymentsService } from '../../../../src/modules/payments/services/payments.service';
+import { CreatePaymentDto } from '../../../../src/modules/payments/dto/create-payment.dto';
 
-jest.mock('../../../common/utils/delay', () => ({
+jest.mock('../../../../src/common/utils/delay', () => ({
   __esModule: true,
   default: jest.fn().mockResolvedValue(undefined),
 }));
 
-jest.mock('../../../common/utils/random-between', () => ({
+jest.mock('../../../../src/common/utils/random-between', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
 
-import randomBetween from '../../../common/utils/random-between';
+import randomBetween from '../../../../src/common/utils/random-between';
 
 const STEP_ORDER = [
   'account_validation',

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { InternalServerErrorException } from '@nestjs/common';
-import { PaymentsController } from './payments.controller';
-import { PaymentsService } from '../services/payments.service';
-import { CreatePaymentDto } from '../dto/create-payment.dto';
+import { PaymentsController } from '../../../../src/modules/payments/controllers/payments.controller';
+import { PaymentsService } from '../../../../src/modules/payments/services/payments.service';
+import { CreatePaymentDto } from '../../../../src/modules/payments/dto/create-payment.dto';
 
 const mockDto: CreatePaymentDto = {
   cardNumber: '4111111111111111',
