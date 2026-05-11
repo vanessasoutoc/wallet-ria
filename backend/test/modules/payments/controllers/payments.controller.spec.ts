@@ -55,7 +55,9 @@ describe('PaymentsController', () => {
 
   describe('create (POST /v1/payments)', () => {
     it('should call processPayment with the provided DTO', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockApprovedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockApprovedResponse);
 
       await controller.create(mockDto);
 
@@ -64,7 +66,9 @@ describe('PaymentsController', () => {
     });
 
     it('should return the result from processPayment', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockApprovedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockApprovedResponse);
 
       const result = await controller.create(mockDto);
 
@@ -72,7 +76,9 @@ describe('PaymentsController', () => {
     });
 
     it('should return approved status when service returns approved', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockApprovedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockApprovedResponse);
 
       const result = await controller.create(mockDto);
 
@@ -80,7 +86,9 @@ describe('PaymentsController', () => {
     });
 
     it('should return declined status when service returns declined', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockDeclinedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockDeclinedResponse);
 
       const result = await controller.create(mockDto);
 
@@ -88,7 +96,9 @@ describe('PaymentsController', () => {
     });
 
     it('should return the transactionId from the service response', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockApprovedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockApprovedResponse);
 
       const result = await controller.create(mockDto);
 
@@ -96,7 +106,9 @@ describe('PaymentsController', () => {
     });
 
     it('should return the steps array from the service response', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockApprovedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockApprovedResponse);
 
       const result = await controller.create(mockDto);
 
@@ -104,7 +116,9 @@ describe('PaymentsController', () => {
     });
 
     it('should return the totalTimeMs from the service response', async () => {
-      jest.spyOn(service, 'processPayment').mockResolvedValue(mockApprovedResponse);
+      jest
+        .spyOn(service, 'processPayment')
+        .mockResolvedValue(mockApprovedResponse);
 
       const result = await controller.create(mockDto);
 
@@ -112,32 +126,46 @@ describe('PaymentsController', () => {
     });
 
     it('should throw InternalServerErrorException when service throws an error', async () => {
-      jest.spyOn(service, 'processPayment').mockRejectedValue(new Error('Unexpected DB error'));
+      jest
+        .spyOn(service, 'processPayment')
+        .mockRejectedValue(new Error('Unexpected DB error'));
 
-      await expect(controller.create(mockDto)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.create(mockDto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
 
     it('should throw InternalServerErrorException with message "Payment processing failed"', async () => {
-      jest.spyOn(service, 'processPayment').mockRejectedValue(new Error('Network failure'));
+      jest
+        .spyOn(service, 'processPayment')
+        .mockRejectedValue(new Error('Network failure'));
 
-      await expect(controller.create(mockDto)).rejects.toThrow('Payment processing failed');
+      await expect(controller.create(mockDto)).rejects.toThrow(
+        'Payment processing failed',
+      );
     });
 
     it('should throw InternalServerErrorException even when service throws a non-Error value', async () => {
       jest.spyOn(service, 'processPayment').mockRejectedValue('string error');
 
-      await expect(controller.create(mockDto)).rejects.toThrow(InternalServerErrorException);
+      await expect(controller.create(mockDto)).rejects.toThrow(
+        InternalServerErrorException,
+      );
     });
 
     it('should not expose the original error message to the client', async () => {
-      jest.spyOn(service, 'processPayment').mockRejectedValue(new Error('Sensitive internal error'));
+      jest
+        .spyOn(service, 'processPayment')
+        .mockRejectedValue(new Error('Sensitive internal error'));
 
       try {
         await controller.create(mockDto);
         fail('Expected InternalServerErrorException to be thrown');
       } catch (err) {
         expect(err).toBeInstanceOf(InternalServerErrorException);
-        expect((err as InternalServerErrorException).message).toBe('Payment processing failed');
+        expect((err as InternalServerErrorException).message).toBe(
+          'Payment processing failed',
+        );
       }
     });
   });

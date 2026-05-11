@@ -26,8 +26,14 @@ describe('bootstrap (main.ts)', () => {
         NestFactory: { create: jest.fn().mockResolvedValue(mockApp) },
         VersioningType,
       }));
-      jest.doMock('../src/common/utils/delay', () => ({ __esModule: true, default: jest.fn().mockResolvedValue(undefined) }));
-      jest.doMock('../src/common/utils/random-between', () => ({ __esModule: true, default: jest.fn().mockReturnValue(3) }));
+      jest.doMock('../src/common/utils/delay', () => ({
+        __esModule: true,
+        default: jest.fn().mockResolvedValue(undefined),
+      }));
+      jest.doMock('../src/common/utils/random-between', () => ({
+        __esModule: true,
+        default: jest.fn().mockReturnValue(3),
+      }));
       require('../src/main');
     });
 
@@ -44,8 +50,14 @@ describe('bootstrap (main.ts)', () => {
         NestFactory: { create: jest.fn().mockResolvedValue(mockApp) },
         VersioningType,
       }));
-      jest.doMock('../src/common/utils/delay', () => ({ __esModule: true, default: jest.fn().mockResolvedValue(undefined) }));
-      jest.doMock('../src/common/utils/random-between', () => ({ __esModule: true, default: jest.fn().mockReturnValue(3) }));
+      jest.doMock('../src/common/utils/delay', () => ({
+        __esModule: true,
+        default: jest.fn().mockResolvedValue(undefined),
+      }));
+      jest.doMock('../src/common/utils/random-between', () => ({
+        __esModule: true,
+        default: jest.fn().mockReturnValue(3),
+      }));
       require('../src/main');
     });
 
@@ -64,8 +76,14 @@ describe('bootstrap (main.ts)', () => {
         NestFactory: { create: jest.fn().mockResolvedValue(mockApp) },
         VersioningType,
       }));
-      jest.doMock('../src/common/utils/delay', () => ({ __esModule: true, default: jest.fn().mockResolvedValue(undefined) }));
-      jest.doMock('../src/common/utils/random-between', () => ({ __esModule: true, default: jest.fn().mockReturnValue(3) }));
+      jest.doMock('../src/common/utils/delay', () => ({
+        __esModule: true,
+        default: jest.fn().mockResolvedValue(undefined),
+      }));
+      jest.doMock('../src/common/utils/random-between', () => ({
+        __esModule: true,
+        default: jest.fn().mockReturnValue(3),
+      }));
       require('../src/main');
     });
 
@@ -87,8 +105,14 @@ describe('bootstrap (main.ts)', () => {
         NestFactory: { create: jest.fn().mockResolvedValue(mockApp) },
         VersioningType,
       }));
-      jest.doMock('../src/common/utils/delay', () => ({ __esModule: true, default: jest.fn().mockResolvedValue(undefined) }));
-      jest.doMock('../src/common/utils/random-between', () => ({ __esModule: true, default: jest.fn().mockReturnValue(3) }));
+      jest.doMock('../src/common/utils/delay', () => ({
+        __esModule: true,
+        default: jest.fn().mockResolvedValue(undefined),
+      }));
+      jest.doMock('../src/common/utils/random-between', () => ({
+        __esModule: true,
+        default: jest.fn().mockReturnValue(3),
+      }));
       require('../src/main');
     });
 
@@ -105,8 +129,14 @@ describe('bootstrap (main.ts)', () => {
         NestFactory: { create: jest.fn().mockResolvedValue(mockApp) },
         VersioningType,
       }));
-      jest.doMock('../src/common/utils/delay', () => ({ __esModule: true, default: jest.fn().mockResolvedValue(undefined) }));
-      jest.doMock('../src/common/utils/random-between', () => ({ __esModule: true, default: jest.fn().mockReturnValue(3) }));
+      jest.doMock('../src/common/utils/delay', () => ({
+        __esModule: true,
+        default: jest.fn().mockResolvedValue(undefined),
+      }));
+      jest.doMock('../src/common/utils/random-between', () => ({
+        __esModule: true,
+        default: jest.fn().mockReturnValue(3),
+      }));
       require('../src/main');
     });
 

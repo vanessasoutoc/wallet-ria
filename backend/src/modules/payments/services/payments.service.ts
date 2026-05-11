@@ -38,7 +38,9 @@ export class PaymentsService {
     return STEP_ORDER.filter((s) => selected.has(s));
   }
 
-  private async runStep(name: StepName): Promise<{ step: string; timeMs: number }> {
+  private async runStep(
+    name: StepName,
+  ): Promise<{ step: string; timeMs: number }> {
     const [min, max] = STEP_TIMINGS[name];
     const duration = randomBetween(min, max);
     await delay(duration);

@@ -108,7 +108,9 @@ describe('PaymentsService', () => {
     it.each([3, 4, 5, 6])(
       'should select exactly %i steps when randomBetween returns %i for count',
       async (count) => {
-        (randomBetween as jest.Mock).mockReturnValueOnce(count).mockReturnValue(500);
+        (randomBetween as jest.Mock)
+          .mockReturnValueOnce(count)
+          .mockReturnValue(500);
         jest.spyOn(Math, 'random').mockReturnValue(0.5);
 
         const result = await service.processPayment(mockDto);
@@ -142,7 +144,9 @@ describe('PaymentsService', () => {
 
     it('should set totalTimeMs equal to the sum of all step timMs', async () => {
       const stepDuration = 600;
-      (randomBetween as jest.Mock).mockReturnValueOnce(3).mockReturnValue(stepDuration);
+      (randomBetween as jest.Mock)
+        .mockReturnValueOnce(3)
+        .mockReturnValue(stepDuration);
       jest.spyOn(Math, 'random').mockReturnValue(0.5);
 
       const result = await service.processPayment(mockDto);
@@ -167,7 +171,9 @@ describe('PaymentsService', () => {
 
     it('should use the duration returned by randomBetween as each step timeMs', async () => {
       const stepDuration = 750;
-      (randomBetween as jest.Mock).mockReturnValueOnce(3).mockReturnValue(stepDuration);
+      (randomBetween as jest.Mock)
+        .mockReturnValueOnce(3)
+        .mockReturnValue(stepDuration);
       jest.spyOn(Math, 'random').mockReturnValue(0.5);
 
       const result = await service.processPayment(mockDto);

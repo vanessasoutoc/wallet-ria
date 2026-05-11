@@ -22,14 +22,4 @@ export class PaymentsController {
       throw new InternalServerErrorException('Payment processing failed');
     }
   }
-
-  @Get()
-  @Version('1')
-  async index() {
-    try {
-      return await this.paymentsService.getAllPayments();
-    } catch {
-      throw new InternalServerErrorException('Failed to retrieve payments');
-    }
-  }
 }
