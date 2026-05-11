@@ -1,31 +1,33 @@
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { Controller, Control, FieldErrors } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 import FormInput from '../FormInput';
 import Button from '../Button';
+import i18n from '../../i18n';
 
 export const createPaymentFormSchema = z.object({
   cardNumber: z
     .string()
-    .min(1, 'Card number is required')
-    .regex(/^\d{16}$/, 'Card number must be 16 digits'),
+    .min(1, i18n.t('payments.validation.cardNumberRequired'))
+    .regex(/^\d{16}$/, i18n.t('payments.validation.cardNumberDigits')),
   holderName: z
     .string()
-    .min(1, 'Cardholder name is required')
-    .min(3, 'Name must be at least 3 characters'),
+    .min(1, i18n.t('payments.validation.holderNameRequired'))
+    .min(3, i18n.t('payments.validation.holderNameMin')),
   expirationDate: z
     .string()
-    .min(1, 'Expiration date is required')
-    .regex(/^\d{2}\/\d{2}$/, 'Expiration date must be in MM/YY format'),
+    .min(1, i18n.t('payments.validation.expirationDateRequired'))
+    .regex(/^\d{2}\/\d{2}$/, i18n.t('payments.validation.expirationDateFormat')),
   cvv: z
     .string()
-    .min(1, 'CVV is required')
-    .regex(/^\d{3,4}$/, 'CVV must be 3 or 4 digits'),
+    .min(1, i18n.t('payments.validation.cvvRequired'))
+    .regex(/^\d{3,4}$/, i18n.t('payments.validation.cvvDigits')),
   amount: z
     .number()
-    .min(0.01, 'Amount must be greater than 0')
-    .multipleOf(0.01, 'Amount must have up to 2 decimal places'),
+    .min(0.01, i18n.t('payments.validation.amountMin'))
+    .multipleOf(0.01, i18n.t('payments.validation.amountDecimals')),
 });
 
 export type CreatePaymentFormData = z.infer<typeof createPaymentFormSchema>;
@@ -43,6 +45,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   isLoading,
   onSubmit,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <View>
       <Controller
@@ -50,8 +54,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         name="cardNumber"
         render={({ field: { value, onChange } }) => (
           <FormInput
-            label="Card Number"
-            placeholder="1234567891234567"
+            label={t('payments.form.fields.cardNumber.label')}
+            placeholder={t('payments.form.fields.cardNumber.placeholder')}
             value={value}
             onChangeText={onChange}
             keyboardType="numeric"
@@ -66,8 +70,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         name="holderName"
         render={({ field: { value, onChange } }) => (
           <FormInput
-            label="Cardholder Name"
-            placeholder="John Doe"
+            label={t('payments.form.fields.holderName.label')}
+            placeholder={t('payments.form.fields.holderName.placeholder')}
             value={value}
             onChangeText={onChange}
             error={errors.holderName?.message}
@@ -80,8 +84,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         name="expirationDate"
         render={({ field: { value, onChange } }) => (
           <FormInput
-            label="Expiration Date"
-            placeholder="MM/YY"
+            label={t('payments.form.fields.expirationDate.label')}
+            placeholder={t('payments.form.fields.expirationDate.placeholder')}
             value={value}
             onChangeText={onChange}
             maxLength={5}
@@ -95,8 +99,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         name="cvv"
         render={({ field: { value, onChange } }) => (
           <FormInput
-            label="CVV"
-            placeholder="123"
+            label={t('payments.form.fields.cvv.label')}
+            placeholder={t('payments.form.fields.cvv.placeholder')}
             value={value}
             onChangeText={onChange}
             keyboardType="numeric"
@@ -112,8 +116,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         name="amount"
         render={({ field: { value, onChange } }) => (
           <FormInput
-            label="Amount"
-            placeholder="150.00"
+            label={t('payments.form.fields.amount.label')}
+            placeholder={t('payments.form.fields.amount.placeholder')}
             value={value ? value.toString() : ''}
             onChangeText={(text) => onChange(parseFloat(text) || 0)}
             keyboardType="decimal-pad"
@@ -124,7 +128,11 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
       <View style={{ marginTop: 24, marginBottom: 16 }}>
         <Button
-          title={isLoading ? 'Creating...' : 'Create Payment'}
+          title={
+            isLoading
+              ? t('payments.form.submit.loading')
+              : t('payments.form.submit.idle')
+          }
           onPress={onSubmit}
           disabled={isLoading}
         />

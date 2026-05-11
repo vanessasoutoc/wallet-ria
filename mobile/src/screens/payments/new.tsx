@@ -8,12 +8,14 @@ import {
   Platform,
 } from 'react-native';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPaymentFormSchema, CreatePaymentFormData, PaymentForm } from '../../components/payments/form';
 import { paymentService } from '../../services/payments';
 
 export const NewPaymentScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -34,9 +36,13 @@ export const NewPaymentScreen: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await paymentService.createPayment(data);
-      Alert.alert('Success', `Payment created with ID: ${response.id}`);
+      Alert.alert(
+        t('common.success'),
+        t('payments.new.successCreated', { id: response.id }),
+      );
       reset();
     } catch (error) {
+      Alert.alert(t('common.error'), t('payments.new.errorCreate'));
       console.error('Payment creation failed:', error);
     } finally {
       setIsLoading(false);
