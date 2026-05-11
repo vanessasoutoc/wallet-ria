@@ -64,4 +64,21 @@ export class PaymentsService {
       steps: results,
     };
   }
+
+  async getAllPayments() {
+    return [
+      {
+        id: '1',
+        amount: 100,
+        status: 'approved',
+        createdAt: new Date(),
+      },
+      {
+        id: '2',
+        amount: 200,
+        status: 'declined',
+        createdAt: new Date(),
+      },
+    ];
+  }
 }
