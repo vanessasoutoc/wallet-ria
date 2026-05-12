@@ -24,12 +24,11 @@ export const NewPaymentScreen: React.FC = () => {
       const response = await paymentService.createPayment(data);
       Alert.alert(
         t('common.success'),
-        t('payments.new.successCreated', { id: response.id }),
+        t('payments.new.successCreated'),
       );
       reset();
     } catch (error) {
       Alert.alert(t('common.error'), t('payments.new.errorCreate'));
-      console.error('Payment creation failed:', error);
     } finally {
       setIsLoading(false);
     }

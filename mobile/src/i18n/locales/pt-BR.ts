@@ -1,23 +1,30 @@
+import { create } from "react-test-renderer";
+
 const ptBR = {
   common: {
     success: 'Sucesso',
     error: 'Erro',
   },
   payments: {
+    currentMoneySymbol: 'R$',
     notFound: 'Nenhum pagamento encontrado.',
+    status: {
+      approved: 'Aprovado',
+      declined: 'Recusado',
+    },
     tabs: {
       list: 'Extrato',
       new: 'Pagar',
     },
     new: {
-      successCreated: 'Pagamento criado com ID: {{id}}',
+      successCreated: 'Pagamento realizado com sucesso!',
       errorCreate: 'Nao foi possivel criar o pagamento.',
     },
     form: {
       fields: {
         cardNumber: {
-          label: 'Numero do cartao',
-          placeholder: '1234567891234567',
+          label: 'Número do cartão',
+          placeholder: '1234 5678 9123 4567',
           brandLabel: 'Bandeira',
           brands: {
             amex: 'American Express',
@@ -29,8 +36,8 @@ const ptBR = {
           },
         },
         holderName: {
-          label: 'Nome no cartao',
-          placeholder: 'John Doe',
+          label: 'Titular do cartão',
+          placeholder: 'Titular',
         },
         expirationDate: {
           label: 'Data de validade',
@@ -44,9 +51,12 @@ const ptBR = {
           label: 'Valor',
           placeholder: '150.00',
         },
+        payedAt: {
+          label: 'Pago em',
+        },
       },
       submit: {
-        idle: 'Criar pagamento',
+        idle: 'Pagar',
         loading: 'Criando...',
       },
     },

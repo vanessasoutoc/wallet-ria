@@ -4,12 +4,17 @@ const enUS = {
     error: 'Error',
   },
   payments: {
+    currentMoneySymbol: '$',
+    status: {
+      approved: 'Approved',
+      declined: 'Declined',
+    },
     tabs: {
       list: 'Payments',
       new: 'New',
     },
     new: {
-      successCreated: 'Payment created with ID: {{id}}',
+      successCreated: 'Payment created!',
       errorCreate: 'Could not create payment.',
     },
     form: {

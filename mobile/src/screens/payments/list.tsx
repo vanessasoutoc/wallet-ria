@@ -1,23 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
 	ActivityIndicator,
 	FlatList,
 	RefreshControl,
 	StyleSheet,
 	Text,
-	TouchableOpacity,
 	View,
 } from 'react-native';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { PaymentItem, paymentService } from '../../services/payments';
-import { RootTabParamList } from '../../routes/root';
 import { useTranslation } from 'react-i18next';
-
-type PaymentsListNavigationProp = NavigationProp<RootTabParamList>;
 
 export const PaymentsListScreen: React.FC = () => {
 	const { t } = useTranslation();
-	const navigation = useNavigation<PaymentsListNavigationProp>();
 	const [items, setItems] = useState<PaymentItem[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isRefreshing, setIsRefreshing] = useState(false);
@@ -40,49 +35,43 @@ export const PaymentsListScreen: React.FC = () => {
 			setIsLoading(false);
 			setIsRefreshing(false);
 		}
-	}, []);
+	}, [t]);
 
-	useEffect(() => {
-		loadPayments();
-	}, [loadPayments]);
+	useFocusEffect(
+		useCallback(() => {
+			loadPayments();
+		}, [loadPayments]),
+	);
 
 	const renderItem = ({ item }: { item: PaymentItem }) => (
 		<View style={styles.card}>
 			<View style={styles.rowBetween}>
-				<Text style={styles.transactionId}>{item.transactionId}</Text>
 				<Text
 					style={[
 						styles.status,
 						item.status === 'approved' ? styles.approved : styles.declined,
 					]}
 				>
-					{item.status.toUpperCase()}
+					{t(`payments.status.${item.status}`)}
 				</Text>
 			</View>
-			<Text style={styles.meta}>Holder: {item.holderName}</Text>
-			<Text style={styles.meta}>Card ending: {item.cardNumberLast4}</Text>
-			<Text style={styles.meta}>Amount: ${item.amount.toFixed(2)}</Text>
-			<Text style={styles.meta}>Created: {new Date(item.createdAt).toLocaleString()}</Text>
+			<Text style={styles.meta}>{t('payments.form.fields.holderName.label')}: {item.holderName}</Text>
+			<Text style={styles.meta}>{t('payments.form.fields.cardNumber.label')}: **** **** **** {item.cardNumberLast4}</Text>
+			<Text style={styles.meta}>{t('payments.form.fields.amount.label')}: {t('payments.currentMoneySymbol')}{item.amount.toFixed(2)}</Text>
+			<Text style={styles.meta}>{t('payments.form.fields.payedAt.label')}: {new Date(item.createdAt).toLocaleString()}</Text>
 		</View>
 	);
 
 	if (isLoading) {
 		return (
 			<View style={styles.centered}>
-				<ActivityIndicator size="large" color="#2563eb" />
+				<ActivityIndicator size="large" color="#004c48" />
 			</View>
 		);
 	}
 
 	return (
 		<View style={styles.container}>
-			<TouchableOpacity
-				style={styles.newPaymentButton}
-				onPress={() => navigation.navigate('NewPayment')}
-			>
-				<Text style={styles.newPaymentButtonText}>{t('payments.tabs.new')}</Text>
-			</TouchableOpacity>
-
 			{error ? <Text style={styles.errorText}>{error}</Text> : null}
 
 			<FlatList

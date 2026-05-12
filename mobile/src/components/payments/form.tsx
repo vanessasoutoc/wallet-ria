@@ -8,6 +8,8 @@ import FormInput from '../FormInput';
 import Button from '../Button';
 import i18n from '../../i18n';
 import { getCardBrand } from './get-card-brand';
+import formatExpirationDate from '../../utils/format-expiration-date';
+import formatCardNumber from '../../utils/format-card-number';
 
 export const createPaymentFormSchema = z.object({
   cardNumber: z
@@ -47,6 +49,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   onSubmitPayment,
 }) => {
   const { t } = useTranslation();
+
   const {
     control,
     handleSubmit,
@@ -73,10 +76,10 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
             <FormInput
               label={t('payments.form.fields.cardNumber.label')}
               placeholder={t('payments.form.fields.cardNumber.placeholder')}
-              value={value}
-              onChangeText={onChange}
+              value={formatCardNumber(value)}
+              onChangeText={(text) => onChange(text.replace(/\D/g, '').slice(0, 16))}
               keyboardType="numeric"
-              maxLength={16}
+              maxLength={19}
               error={errors.cardNumber?.message}
             />
             {value.length > 0 && (
@@ -102,37 +105,42 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         )}
       />
 
-      <Controller
-        control={control}
-        name="expirationDate"
-        render={({ field: { value, onChange } }) => (
-          <FormInput
-            label={t('payments.form.fields.expirationDate.label')}
-            placeholder={t('payments.form.fields.expirationDate.placeholder')}
-            value={value}
-            onChangeText={onChange}
-            maxLength={5}
-            error={errors.expirationDate?.message}
-          />
-        )}
-      />
+      <View style={styles.rowInputs}>
+        <Controller
+          control={control}
+          name="expirationDate"
+          render={({ field: { value, onChange } }) => (
+            <FormInput
+              label={t('payments.form.fields.expirationDate.label')}
+              placeholder={t('payments.form.fields.expirationDate.placeholder')}
+              value={value}
+              onChangeText={(text) => onChange(formatExpirationDate(text))}
+              keyboardType="numeric"
+              maxLength={5}
+              error={errors.expirationDate?.message}
+              containerStyle={styles.rowInputItem}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="cvv"
-        render={({ field: { value, onChange } }) => (
-          <FormInput
-            label={t('payments.form.fields.cvv.label')}
-            placeholder={t('payments.form.fields.cvv.placeholder')}
-            value={value}
-            onChangeText={onChange}
-            keyboardType="numeric"
-            maxLength={4}
-            secureTextEntry
-            error={errors.cvv?.message}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="cvv"
+          render={({ field: { value, onChange } }) => (
+            <FormInput
+              label={t('payments.form.fields.cvv.label')}
+              placeholder={t('payments.form.fields.cvv.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="numeric"
+              maxLength={4}
+              secureTextEntry
+              error={errors.cvv?.message}
+              containerStyle={styles.rowInputItem}
+            />
+          )}
+        />
+      </View>
 
       <Controller
         control={control}
@@ -151,6 +159,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
       <View style={{ marginTop: 24, marginBottom: 16 }}>
         <Button
+          style={{backgroundColor: '#004c48'}}
           title={
             isLoading
               ? t('payments.form.submit.loading')
@@ -177,5 +186,12 @@ const styles = StyleSheet.create({
     color: '#555',
     fontSize: 12,
     fontWeight: '500',
+  },
+  rowInputs: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  rowInputItem: {
+    flex: 1,
   },
 });
