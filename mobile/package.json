@@ -19,6 +19,7 @@
     "react-native": "0.85.3",
     "react-native-mask-input": "^1.2.3",
     "react-native-safe-area-context": "^5.5.2",
+    "rn-app-icons": "^1.0.7",
     "zod": "^4.4.3"
   },
   "devDependencies": {
