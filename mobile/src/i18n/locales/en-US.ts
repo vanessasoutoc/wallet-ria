@@ -65,6 +65,7 @@ const enUS = {
       cvvDigits: 'CVV must be 3 or 4 digits',
       amountMin: 'Amount must be greater than 0',
       amountDecimals: 'Amount must have up to 2 decimal places',
+      expirationDateExpired: 'Expiration date expired',
     },
   },
 };

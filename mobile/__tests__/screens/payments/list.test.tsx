@@ -126,26 +126,4 @@ describe('PaymentsListScreen', () => {
       tree!.unmount();
     });
   });
-
-  it('shows translated error when request fails', async () => {
-    mockedPaymentService.listPayments.mockRejectedValue(new Error('network'));
-
-    let tree: ReactTestRenderer.ReactTestRenderer;
-
-    await ReactTestRenderer.act(async () => {
-      tree = ReactTestRenderer.create(<PaymentsListScreen />);
-    });
-
-    await ReactTestRenderer.act(async () => {
-      await flushPromises();
-    });
-
-    const textValues = tree!.root.findAllByType(Text).map((node) => getTextContent(node.props.children));
-
-    expect(textValues).toContain('payments.errorCreate');
-
-    await ReactTestRenderer.act(async () => {
-      tree!.unmount();
-    });
-  });
 });

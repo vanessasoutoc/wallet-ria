@@ -2,16 +2,17 @@ import React from 'react';
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import type { Resolver } from 'react-hook-form';
 import FormInput from '../FormInput';
 import Button from '../Button';
 import i18n from '../../i18n';
 import { getCardBrand } from './get-card-brand';
 import formatExpirationDate from '../../utils/format-expiration-date';
 import formatCardNumber from '../../utils/format-card-number';
+import expirationDateValid from '../../utils/expiration-date-valid';
 
-export const createPaymentFormSchema = z.object({
+const getSchema = () => z.object({
   cardNumber: z
     .string()
     .min(1, i18n.t('payments.validation.cardNumberRequired'))
@@ -23,7 +24,8 @@ export const createPaymentFormSchema = z.object({
   expirationDate: z
     .string()
     .min(1, i18n.t('payments.validation.expirationDateRequired'))
-    .regex(/^\d{2}\/\d{2}$/, i18n.t('payments.validation.expirationDateFormat')),
+    .regex(/^\d{2}\/\d{2}$/, i18n.t('payments.validation.expirationDateFormat'))
+    .refine(expirationDateValid, i18n.t('payments.validation.expirationDateExpired')),
   cvv: z
     .string()
     .min(1, i18n.t('payments.validation.cvvRequired'))
@@ -34,7 +36,23 @@ export const createPaymentFormSchema = z.object({
     .multipleOf(0.01, i18n.t('payments.validation.amountDecimals')),
 });
 
+export const createPaymentFormSchema = getSchema();
+
 export type CreatePaymentFormData = z.infer<typeof createPaymentFormSchema>;
+
+const safeZodResolver = (schema: z.ZodTypeAny): Resolver<CreatePaymentFormData> =>
+  async (values) => {
+    const result = await schema.safeParseAsync(values);
+    if (result.success) return { values: result.data as CreatePaymentFormData, errors: {} };
+    return {
+      values: {} as Record<string, never>,
+      errors: result.error.issues.reduce((acc, issue) => {
+        const key = issue.path[0] as keyof CreatePaymentFormData;
+        if (!acc[key]) acc[key] = { type: issue.code, message: issue.message };
+        return acc;
+      }, {} as Record<keyof CreatePaymentFormData, { type: string; message: string }>),
+    };
+  };
 
 interface PaymentFormProps {
   isLoading: boolean;
@@ -53,10 +71,11 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm<CreatePaymentFormData>({
-    resolver: zodResolver(createPaymentFormSchema),
+    resolver: safeZodResolver(getSchema()),
+    mode: 'onChange',
     defaultValues: {
       cardNumber: '',
       holderName: '',
@@ -65,6 +84,17 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       amount: 0,
     },
   });
+
+  const onSubmit = async (data: CreatePaymentFormData) => {
+    try {
+      await onSubmitPayment(data, reset);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        console.log('Validation errors:', error.flatten().fieldErrors);
+        console.warn('Validation error:', error.flatten().fieldErrors);
+      }
+    }
+  };
 
   return (
     <View>
@@ -165,14 +195,14 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               ? t('payments.form.submit.loading')
               : t('payments.form.submit.idle')
           }
-          onPress={handleSubmit((data) => onSubmitPayment(data, reset))}
-          disabled={isLoading}
+          onPress={handleSubmit(onSubmit)}
+          disabled={isLoading || !isValid}
         />
       </View>
 
       {isLoading && (
         <View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-          <ActivityIndicator size="large" color="#007AFF" />
+          <ActivityIndicator size="large" color="#004c48" />
         </View>
       )}
     </View>

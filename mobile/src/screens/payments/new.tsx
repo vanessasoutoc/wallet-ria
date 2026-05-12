@@ -10,6 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { CreatePaymentFormData, PaymentForm } from '../../components/payments/form';
 import { paymentService } from '../../services/payments';
+import z from 'zod';
 
 export const NewPaymentScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,10 @@ export const NewPaymentScreen: React.FC = () => {
         t('payments.new.successCreated'),
       );
       reset();
-    } catch (error) {
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        console.warn('Validation error:', err.flatten().fieldErrors);
+      }
       Alert.alert(t('common.error'), t('payments.new.errorCreate'));
     } finally {
       setIsLoading(false);
