@@ -25,7 +25,37 @@ Aplicação de processamento de pagamentos composta por um **backend** NestJS e 
 
 ---
 
+## Estrutura
+
+```
+wallet-ria/
+├── backend/          # API NestJS
+│   ├── src/
+│   │   ├── main.ts
+│   │   ├── common/utils/
+│   │   └── modules/payments/
+│   └── test/
+└── mobile/           # App React Native
+    ├── src/
+    │   ├── components/
+    │   ├── screens/payments/
+    │   ├── services/
+    │   ├── routes/
+    │   ├── i18n/
+    │   └── utils/
+    └── __tests__/
+```
+
+---
+
 ## Instalação
+
+### Clonar
+
+```bash
+git clone <repo-url>
+cd wallet-RIA
+```
 
 ### Backend
 
@@ -306,23 +336,8 @@ Tests:       34 passed, 34 total
 
 ---
 
-## Estrutura
+## IA 
 
-```
-wallet-ria/
-├── backend/          # API NestJS
-│   ├── src/
-│   │   ├── main.ts
-│   │   ├── common/utils/
-│   │   └── modules/payments/
-│   └── test/
-└── mobile/           # App React Native
-    ├── src/
-    │   ├── components/
-    │   ├── screens/payments/
-    │   ├── services/
-    │   ├── routes/
-    │   ├── i18n/
-    │   └── utils/
-    └── __tests__/
-```
+Foi utilizada IA como ferramente de ajuda e otimização para o desenvolvimento.
+- Testes unitários (backend e mobile);
+- Documentações;

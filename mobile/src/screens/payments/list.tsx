@@ -29,8 +29,6 @@ export const PaymentsListScreen: React.FC = () => {
 			setError(null);
 			const response = await paymentService.listPayments(1, 10);
 			setItems(response.items);
-		} catch {
-			setError(t('payments.errorCreate'));
 		} finally {
 			setIsLoading(false);
 			setIsRefreshing(false);
