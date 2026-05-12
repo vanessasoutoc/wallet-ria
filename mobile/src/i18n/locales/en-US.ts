@@ -4,6 +4,10 @@ const enUS = {
     error: 'Error',
   },
   payments: {
+    tabs: {
+      list: 'Payments',
+      new: 'New',
+    },
     new: {
       successCreated: 'Payment created with ID: {{id}}',
       errorCreate: 'Could not create payment.',

@@ -4,6 +4,11 @@ const ptBR = {
     error: 'Erro',
   },
   payments: {
+    notFound: 'Nenhum pagamento encontrado.',
+    tabs: {
+      list: 'Extrato',
+      new: 'Pagar',
+    },
     new: {
       successCreated: 'Pagamento criado com ID: {{id}}',
       errorCreate: 'Nao foi possivel criar o pagamento.',
