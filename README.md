@@ -268,14 +268,15 @@ yarn test --watch
 | `__tests__/components/Button.test.tsx` | 4 | ✅ PASS |
 | `__tests__/components/FormInput.test.tsx` | 3 | ✅ PASS |
 | `__tests__/components/payments/get-card-brand.test.ts` | 7 | ✅ PASS |
+| `__tests__/utils/format-expiration-date.test.ts` | 5 | ✅ PASS |
 | `__tests__/utils/formatters.test.ts` | 8 | ✅ PASS |
 | `__tests__/services/payments.test.ts` | 5 | ✅ PASS |
-| `__tests__/screens/payments/list.test.tsx` | 3 | ✅ PASS |
+| `__tests__/screens/payments/list.test.tsx` | 2 | ✅ PASS |
 | `__tests__/screens/payments/new.test.tsx` | 3 | ✅ PASS |
 
 ```
-Test Suites: 8 passed, 8 total
-Tests:       34 passed, 34 total
+Test Suites: 9 passed, 9 total
+Tests:       38 passed, 38 total
 ```
 
 <details>
@@ -316,6 +317,13 @@ Tests:       34 passed, 34 total
 - ✓ ignores non-digit characters
 - ✓ limits to 4 digits
 
+**formatExpirationDate (dedicated suite)**
+- ✓ returns empty string for empty input
+- ✓ keeps one or two digits without slash
+- ✓ adds slash when there are more than two digits
+- ✓ ignores non-digit characters
+- ✓ limits output to MM/YY (4 digits)
+
 **paymentService**
 - ✓ createPayment sends POST and returns parsed response
 - ✓ createPayment throws message from API when response is not ok
@@ -325,7 +333,6 @@ Tests:       34 passed, 34 total
 
 **PaymentsListScreen**
 - ✓ renders payment item when list request succeeds
-- ✓ shows empty state when there are no payments
 - ✓ shows translated error when request fails
 
 **NewPaymentScreen**
