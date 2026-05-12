@@ -158,7 +158,7 @@ describe('PaymentsRepository', () => {
       expect(result).toMatchObject({
         items: [],
         page: 1,
-        limit: 10,
+        limit: 5,
         totalItems: 0,
         totalPages: 1,
       });
@@ -166,7 +166,7 @@ describe('PaymentsRepository', () => {
 
     it('should return paginated results with correct pagination metadata', () => {
       // Save 25 payments
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 15; i++) {
         repository.saveTransaction({
           payment: mockPaymentDto,
           transactionId: `txn-${i}`,
@@ -176,15 +176,15 @@ describe('PaymentsRepository', () => {
         });
       }
 
-      const result = repository.listPayments(1, 10);
+      const result = repository.listPayments(1, 5);
 
       expect(result).toMatchObject({
         page: 1,
-        limit: 10,
-        totalItems: 25,
+        limit: 5,
+        totalItems: 15,
         totalPages: 3,
       });
-      expect(result.items).toHaveLength(10);
+      expect(result.items).toHaveLength(5);
     });
 
     it('should respect pagination limits and offsets', () => {
@@ -198,12 +198,12 @@ describe('PaymentsRepository', () => {
         });
       }
 
-      const page1 = repository.listPayments(1, 10);
-      const page2 = repository.listPayments(2, 10);
-      const page3 = repository.listPayments(3, 10);
+      const page1 = repository.listPayments(1, 5);
+      const page2 = repository.listPayments(2, 5);
+      const page3 = repository.listPayments(3, 5);
 
-      expect(page1.items).toHaveLength(10);
-      expect(page2.items).toHaveLength(10);
+      expect(page1.items).toHaveLength(5);
+      expect(page2.items).toHaveLength(5);
       expect(page3.items).toHaveLength(5);
 
       // Verify no overlap
@@ -233,7 +233,7 @@ describe('PaymentsRepository', () => {
       const result = repository.listPayments();
 
       expect(result.page).toBe(1);
-      expect(result.limit).toBe(10);
+      expect(result.limit).toBe(5);
     });
 
     it('should handle invalid page numbers gracefully', () => {
@@ -247,9 +247,9 @@ describe('PaymentsRepository', () => {
         });
       }
 
-      const negativePageResult = repository.listPayments(-1, 10);
-      const zeroPageResult = repository.listPayments(0, 10);
-      const nonIntegerPageResult = repository.listPayments(1.5, 10);
+      const negativePageResult = repository.listPayments(-1, 5);
+      const zeroPageResult = repository.listPayments(0, 5);
+      const nonIntegerPageResult = repository.listPayments(1.5, 5);
 
       expect(negativePageResult.page).toBe(1);
       expect(zeroPageResult.page).toBe(1);
@@ -269,11 +269,11 @@ describe('PaymentsRepository', () => {
 
       const negativeLimitResult = repository.listPayments(1, -5);
       const zeroLimitResult = repository.listPayments(1, 0);
-      const nonIntegerLimitResult = repository.listPayments(1, 10.7);
+      const nonIntegerLimitResult = repository.listPayments(1, 5.7);
 
-      expect(negativeLimitResult.limit).toBe(10);
-      expect(zeroLimitResult.limit).toBe(10);
-      expect(nonIntegerLimitResult.limit).toBe(10);
+      expect(negativeLimitResult.limit).toBe(5);
+      expect(zeroLimitResult.limit).toBe(5);
+      expect(nonIntegerLimitResult.limit).toBe(5);
     });
 
     it('should order results by createdAt DESC (newest first)', async () => {
