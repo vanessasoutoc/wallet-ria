@@ -13,6 +13,15 @@ const enUS = {
         cardNumber: {
           label: 'Card number',
           placeholder: '1234567891234567',
+          brandLabel: 'Brand',
+          brands: {
+            amex: 'American Express',
+            visa: 'Visa',
+            mastercard: 'Mastercard',
+            discover: 'Discover',
+            jcb: 'JCB',
+            unknown: 'Unknown',
+          },
         },
         holderName: {
           label: 'Cardholder name',

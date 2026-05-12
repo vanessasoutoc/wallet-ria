@@ -13,6 +13,15 @@ const ptBR = {
         cardNumber: {
           label: 'Numero do cartao',
           placeholder: '1234567891234567',
+          brandLabel: 'Bandeira',
+          brands: {
+            amex: 'American Express',
+            visa: 'Visa',
+            mastercard: 'Mastercard',
+            discover: 'Discover',
+            jcb: 'JCB',
+            unknown: 'Desconhecida',
+          },
         },
         holderName: {
           label: 'Nome no cartao',

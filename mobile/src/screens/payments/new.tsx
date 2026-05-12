@@ -7,32 +7,18 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { createPaymentFormSchema, CreatePaymentFormData, PaymentForm } from '../../components/payments/form';
+import { CreatePaymentFormData, PaymentForm } from '../../components/payments/form';
 import { paymentService } from '../../services/payments';
 
 export const NewPaymentScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<CreatePaymentFormData>({
-    resolver: zodResolver(createPaymentFormSchema),
-    defaultValues: {
-      cardNumber: '',
-      holderName: '',
-      expirationDate: '',
-      cvv: '',
-      amount: 0,
-    },
-  });
 
-  const onSubmit = async (data: CreatePaymentFormData) => {
+  const onSubmit = async (
+    data: CreatePaymentFormData,
+    reset: () => void,
+  ) => {
     setIsLoading(true);
     try {
       const response = await paymentService.createPayment(data);
@@ -60,12 +46,7 @@ export const NewPaymentScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.formContainer}>
-          <PaymentForm
-            control={control}
-            errors={errors}
-            isLoading={isLoading}
-            onSubmit={handleSubmit(onSubmit)}
-          />
+          <PaymentForm isLoading={isLoading} onSubmitPayment={onSubmit} />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

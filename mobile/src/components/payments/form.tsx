@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import { Controller, Control, FieldErrors } from 'react-hook-form';
+import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import FormInput from '../FormInput';
 import Button from '../Button';
 import i18n from '../../i18n';
+import { getCardBrand } from './get-card-brand';
 
 export const createPaymentFormSchema = z.object({
   cardNumber: z
@@ -33,19 +35,33 @@ export const createPaymentFormSchema = z.object({
 export type CreatePaymentFormData = z.infer<typeof createPaymentFormSchema>;
 
 interface PaymentFormProps {
-  control: Control<CreatePaymentFormData>;
-  errors: FieldErrors<CreatePaymentFormData>;
   isLoading: boolean;
-  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  onSubmitPayment: (
+    data: CreatePaymentFormData,
+    reset: () => void,
+  ) => Promise<void>;
 }
 
 export const PaymentForm: React.FC<PaymentFormProps> = ({
-  control,
-  errors,
   isLoading,
-  onSubmit,
+  onSubmitPayment,
 }) => {
   const { t } = useTranslation();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<CreatePaymentFormData>({
+    resolver: zodResolver(createPaymentFormSchema),
+    defaultValues: {
+      cardNumber: '',
+      holderName: '',
+      expirationDate: '',
+      cvv: '',
+      amount: 0,
+    },
+  });
 
   return (
     <View>
@@ -53,15 +69,22 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         control={control}
         name="cardNumber"
         render={({ field: { value, onChange } }) => (
-          <FormInput
-            label={t('payments.form.fields.cardNumber.label')}
-            placeholder={t('payments.form.fields.cardNumber.placeholder')}
-            value={value}
-            onChangeText={onChange}
-            keyboardType="numeric"
-            maxLength={16}
-            error={errors.cardNumber?.message}
-          />
+          <View>
+            <FormInput
+              label={t('payments.form.fields.cardNumber.label')}
+              placeholder={t('payments.form.fields.cardNumber.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="numeric"
+              maxLength={16}
+              error={errors.cardNumber?.message}
+            />
+            {value.length > 0 && (
+              <Text style={styles.brandText}>
+                {t('payments.form.fields.cardNumber.brandLabel')}: {t(`payments.form.fields.cardNumber.brands.${getCardBrand(value)}`)}
+              </Text>
+            )}
+          </View>
         )}
       />
 
@@ -133,7 +156,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               ? t('payments.form.submit.loading')
               : t('payments.form.submit.idle')
           }
-          onPress={onSubmit}
+          onPress={handleSubmit((data) => onSubmitPayment(data, reset))}
           disabled={isLoading}
         />
       </View>
@@ -146,3 +169,13 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  brandText: {
+    marginTop: -10,
+    marginBottom: 10,
+    color: '#555',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+});
