@@ -103,10 +103,10 @@ export class PaymentsRepository implements OnModuleDestroy {
     };
   }
 
-  listPayments(page = 1, limit = 10): PaginatedPayments {
+  listPayments(page = 1, limit = 5): PaginatedPayments {
     const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
     const safeLimit =
-      Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : 10;
+      Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : 5;
     const offset = (safePage - 1) * safeLimit;
 
     const totalItemsResult = this.database

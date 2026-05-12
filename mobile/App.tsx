@@ -7,7 +7,7 @@
 
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import NewPaymentScreen from './src/screens/payments/new';
+import RootNavigator from './src/routes/root';
 import './src/i18n';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View style={styles.container}>
-        <NewPaymentScreen />
+        <RootNavigator />
       </View>
     </SafeAreaProvider>
   );
@@ -26,7 +26,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight || 40,
+    paddingTop: StatusBar.currentHeight || 0,
   },
 });
 

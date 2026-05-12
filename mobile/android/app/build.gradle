@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+pply from: "../../node_modules/react-native-vector-image/strip_svgs.gradle"
 
 /**
  * This is the configuration block to customize your React Native Android app.
