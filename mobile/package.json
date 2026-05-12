@@ -2,6 +2,9 @@
   "name": "mobile",
   "version": "0.0.1",
   "private": true,
+  "engines":{
+    "node": ">=24.14.1"
+  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --simulator='iPhone 16e'",
@@ -50,8 +53,5 @@
     "prettier": "2.8.8",
     "react-test-renderer": "19.2.3",
     "typescript": "^5.8.3"
-  },
-  "engines": {
-    "node": ">= 22.11.0"
   }
 }
